@@ -1,5 +1,6 @@
-const NFT = artifacts.require("NFT");
+const Carnival = artifacts.require("Carnival");
+
 module.exports = function(deployer) {
-  // deployer.deploy(NFT,"Hello","World");
+  deployer.deploy(Carnival,"Carnival","CRN", "");
 };
 

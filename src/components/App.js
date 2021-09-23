@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Navbar from './NavBar/Navbar';
-import TroveIt from '../abis/NFT.json'
+import Carnival from '../abis/Carnival.json'
 import Web3 from 'web3';
 import Upload from './Upload/Upload';
 import Feed from './Feed/Feed';
-import Premium from './Premium/Premium';
 import Profile from './Profile/Profile';
-import Photography from './PhotographyNFT/Photography';
-import MarketPlace from './MarketPlace/MarketPlace';
 import Login from './Login/Login';
-import Portis from '@portis/web3';
 
 class App extends Component {
   async componentWillMount() {
@@ -33,26 +29,15 @@ class App extends Component {
 
   async loadBlockchainData() {
     const web3 = window.web3;
-
-    // const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', 'maticMumbai');
-    // const web3 = new Web3(portis.provider);
-    /*
-    const myLocalPOANode = {
-      nodeUrl: "https://matic-mumbai.chainstacklabs.com",
-      chainId: 80001,
-    };
-    const portis = new Portis('c0f465f7-8289-42c1-98a6-cec427ceecc6', myLocalPOANode);
-    const web3 = new Web3(portis.provider);
-    */
     // Load account
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
     // Network ID
     const networkId = await web3.eth.net.getId()
-    const networkData = TroveIt.networks[networkId]
+    const networkData = Carnival.networks[networkId]
     if (networkData) {
-      const troveit = new web3.eth.Contract(TroveIt.abi, networkData.address)
-      this.setState({ troveit })
+      const carnival = new web3.eth.Contract(Carnival.abi, networkData.address)
+      this.setState({ carnival })
 
       this.setState({ loading: false })
 
@@ -65,29 +50,21 @@ class App extends Component {
     super(props)
     this.state = {
       account: '',
-      troveit: null
+      carnival: null
     }
   }
 
   render() {
     return (
-      // <div className="App" style={{backgroundSize: "cover",
-      // height: "100vh",
-      // color: "#f5f5f5"}}>
-      // {/* App NavBar */}
       <Router>
         <Navbar account={this.state.account} />
         <Switch>
           <Route path="/" exact component={() => <Login />} />
           <Route path="/upload" exact component={() => <Upload />} />
           <Route path="/feed" exact component={() => <Feed />} />
-          <Route path="/premium" exact component={() => <Premium />} />
           <Route path="/profile" exact component={() => <Profile />} />
-          <Route path="/photo" exact component={() => <Photography />} />
-          <Route path="/marketplace" exact component={() => <MarketPlace />} />
         </Switch>
       </Router>
-      // </div>
     );
   }
 
