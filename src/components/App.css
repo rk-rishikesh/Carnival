@@ -1,0 +1,38 @@
+.forgif {
+    height: 100%;
+    margin: 5%;
+    align-items: left;
+    border-radius: 0%;
+}
+
+   
+.not-found{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: #f8f5fa;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    /* padding-left: 0px;
+    margin-left: 0px;
+    left: 0px; */
+}
+
+.arrow {
+    margin-top: 5%;
+    height: 54vw;
+    width: 120vh;
+    align-items: right;
+    margin-left: 80px;
+    background-color: #2a2a2b;
+}
+
+.button {
+    margin-top: 22%;
+    margin-left: 22%;
+}
+
+.innerButton{
+    margin-left: 35%;
+}

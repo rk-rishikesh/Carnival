@@ -1,0 +1,12 @@
+.video {
+    align-items: left;
+}
+
+.barrow{ 
+    margin-top: 5%;
+    height: 54vw;
+    width: 120vh;
+    align-items: right;
+    margin-left: 250px;
+    background-color: #9a9a9c; 
+}

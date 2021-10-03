@@ -34,8 +34,8 @@ function Navigation(props) {
                   //variant="contained"
                   size="small"
                 >
-                  <Link class="nav-link" to="/upload" style={{ color: "#fd535b" }}>
-                    Upload 
+                  <Link class="nav-link" to="/" style={{ color: "blue" }}>
+                    Home 
                     <span class="sr-only">(current)</span>
                   </Link>
                 </Button>
@@ -47,46 +47,8 @@ function Navigation(props) {
                 color="white"
                 // variant="contained"
                 size="small">
-                  <Link class="nav-link" to="/feed" style={{ color: "#fd535b" }} >
-                    Memorials
-                  </Link>
-                </Button>
-              </li>
-
-              <li
-                class={`nav-item  ${props.location.pathname === "/premium" ? "active" : ""
-                  }`}
-              > <Button
-                color="white"
-                // variant="contained"
-                size="small">
-                  <Link class="nav-link" to="/premium" style={{ color: "#fd535b" }} >
-                    Premium
-                  </Link>
-                </Button>
-              </li>
-
-              <li
-                class={`nav-item  ${props.location.pathname === "/photo" ? "active" : ""
-                  }`}
-              > <Button
-                color="white"
-                // variant="contained"
-                size="small">
-                  <Link class="nav-link" to="/photo" style={{ color: "#fd535b" }} >
-                    Photography
-                  </Link>
-                </Button>
-              </li>
-
-              <li
-                class={`nav-item  ${props.location.pathname === "/marketplace" ? "active" : ""
-                  }`}
-              > <Button
-                color="white"
-                size="small">
-                  <Link class="nav-link" to="/marketplace" style={{ color: "#fd535b" }} >
-                    Marketplace
+                  <Link class="nav-link" to="/feed" style={{ color: "blue" }} >
+                    Feeds
                   </Link>
                 </Button>
               </li>
@@ -99,7 +61,7 @@ function Navigation(props) {
                   color="white"
                   size="small"
                 >
-                  <Link class="nav-link" to="/profile" style={{ color: "#fd535b" }} >
+                  <Link class="nav-link" to="/profile" style={{ color: "blue" }} >
                     My Profile
                   </Link>
                 </Button>

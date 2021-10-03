@@ -1,17 +1,23 @@
 import React, { Component } from "react";
+import {
+  useParams,
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import { Link, withRouter } from "react-router-dom";
+//import Upload from './Upload/Upload';
+import "./Screen.css";
+import { TextField, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import Button from "@material-ui/core/Button";
 import Web3 from "web3";
 import Carnival from "../../abis/Carnival.json";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import IconButton from "@material-ui/core/IconButton";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { NFTStorage, File } from "nft.storage";
-import { TextField, Paper } from "@material-ui/core";
-
-//import { TextField, Paper, Typography } from "@material-ui/core";
-//import bg from './trial.jpg';
 
 const apiKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEEwNzc3ODdhNjU3OTJmRGIzN0YyYzQzMzcwM2MxNDJCNjg3QjIxMWEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzMjU1MTg0OTk0NiwibmFtZSI6IkNhcm5pdmFsIn0.uJtvLmAVBHVOwiRUleEoXEQJWoJyaMdA9fipLch9sq8";
@@ -27,9 +33,9 @@ const useStyles = (theme) => ({
     display: "none",
   },
   paper: {
-    margin: "50px 100px 100px 100px ",
-    width: "30%",
-    height: "110%",
+    margin: "100px 130px ",
+    width: "60%",
+    height: "60%",
     padding: theme.spacing(2),
     backgroundSize: "100%",
     backgroundRepeat: "no-repeat",
@@ -57,7 +63,28 @@ const ipfs = ipfsClient({
   protocol: "https",
 }); // leaving out the arguments will default to these values
 
-class Upload extends Component {
+
+class Screen extends Component {
+  // handle input change
+  handleInputChange = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...inputList];
+    list[index][name] = value;
+    setInputList(list);
+  };
+
+  // handle click event of the Remove button
+  handleRemoveClick = (index) => {
+    const list = [...inputList];
+    list.splice(index, 1);
+    setInputList(list);
+  };
+
+  // handle click event of the Add button
+  handleAddClick = () => {
+    setInputList([...inputList, { firstName: "", lastName: "" }]);
+  };
+
   async componentWillMount() {
     await this.loadWeb3();
     await this.loadBlockchainData();
@@ -103,18 +130,6 @@ class Upload extends Component {
     const file = event.target.files[0];
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
-
-    reader.onloadend = () => {
-      this.setState({ buffer: Buffer(reader.result) });
-      console.log("buffer", this.state.buffer);
-    };
-  };
-
-  captureFile = (event) => {
-    event.preventDefault();
-    const file = event.target.files[0];
-    const reader = new window.FileReader();
-    reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
       this.setState({ buffer: Buffer(reader.result) });
       console.log("buffer", this.state.buffer);
@@ -131,7 +146,7 @@ class Upload extends Component {
       const metadata = await client.store({
         name: name,
         description: description,
-        image: new File([data], "trial.mp4", { type: "video/mp4" }),
+        image: new File([data], 'trial.jpg', { type: 'image/jpg' }),
       });
       console.log("metadata", metadata);
       return metadata.url;
@@ -163,28 +178,7 @@ class Upload extends Component {
     this.setState({ description: event.target.value });
   };
 
-  addItem(e) {
-    if (this._inputElement.value !== "") {
-      var newItem = {
-        text: this._inputElement.value,
-        key: Date.now(),
-      };
-
-      this.setState((prevState) => {
-        return {
-          items: prevState.items.concat(newItem),
-        };
-      });
-
-      this._inputElement.value = "";
-    }
-
-    console.log(this.state.items);
-
-    e.preventDefault();
-  }
-
-  constructor(props) {
+constructor(props) {
     super(props);
     this.state = {
       account: "",
@@ -193,24 +187,33 @@ class Upload extends Component {
       loading: true,
       name: "",
       description: "",
-      items: [],
     };
     this.uploadPost = this.uploadPost.bind(this);
     this.captureFile = this.captureFile.bind(this);
-    this.addItem = this.addItem.bind(this);
   }
-
+  
   render() {
     const { classes } = this.props;
     return (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
+      <div className="not-found">
+        <div style={{marginLeft: "2%"}}></div>
+        <div className="card mb-4">
+          <div>
+            <video
+              src="https://youtu.be/Il0S8BoucSA"
+              controls
+              style={{ width: "800px" }}
+            ></video>
+          </div>
+          <h3>
+            <b>
+              <i style={{ color: "black", marginLeft: "2%" }}>
+                Token Id: {this.props.id}
+              </i>
+            </b>
+          </h3>
+        </div>
+        <div className="barrow">
         {this.state.loading ? (
           <div className="center mt-19">
             {/* loader */}
@@ -225,7 +228,47 @@ class Upload extends Component {
             ></img>
           </div>
         ) : (
-          <Paper className={classes.paper}>
+        <Paper className={classes.paper}>
+          <form
+              autoComplete="off"
+              noValidate
+              className={`${classes.root} ${classes.form}`}
+              onSubmit={(event) => {
+                event.preventDefault();
+                const name = this.state.name;
+                const description = this.state.description;
+                this.uploadPost(name, description);
+              }}
+            >
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="icon-button-file"
+                type="file"
+                onChange={this.captureFile}
+              />
+              <label htmlFor="icon-button-file">
+                <IconButton
+                  color="primary"
+                  aria-label="upload picture"
+                  component="span"
+                >
+                  <AddAPhotoIcon />
+                </IconButton>
+              </label>
+              <div className={classes.fileInput}></div>
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                size="large"
+                fullWidth
+                className={classes.buttonSubmit}
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload
+              </Button>
+            </form>
             <form
               autoComplete="off"
               noValidate
@@ -238,7 +281,7 @@ class Upload extends Component {
               }}
             >
               <input
-                accept=".mp4, .mkv .ogg .wmv"
+                accept="image/*"
                 className={classes.input}
                 id="icon-button-file"
                 type="file"
@@ -257,7 +300,7 @@ class Upload extends Component {
               <TextField
                 name="name"
                 variant="outlined"
-                label="Title"
+                label="Quantity"
                 fullWidth
                 value={this.state.value}
                 onChange={this.setName}
@@ -265,12 +308,11 @@ class Upload extends Component {
               <TextField
                 name="description"
                 variant="outlined"
-                label="Description"
+                label="Cost"
                 fullWidth
                 value={this.state.value}
                 onChange={this.setDescription}
               />
-
               <div className={classes.fileInput}></div>
               <Button
                 type="submit"
@@ -284,23 +326,12 @@ class Upload extends Component {
                 Upload
               </Button>
             </form>
-
-            <div>
-              <form onSubmit={this.addItem}>
-                <input
-                  ref={(a) => (this._inputElement = a)}
-                  placeholder="Add Sub Owner"
-                ></input>
-                <button type="submit">add</button>
-              </form>
-              {console.log(this.state.items)}
-            </div>
-            
           </Paper>
         )}
+        </div>
       </div>
     );
   }
 }
 
-export default withStyles(useStyles)(Upload);
+export default withStyles(useStyles)(Screen);
