@@ -194,6 +194,7 @@ class Upload extends Component {
       name: "",
       description: "",
       items: [],
+
     };
     this.uploadPost = this.uploadPost.bind(this);
     this.captureFile = this.captureFile.bind(this);
@@ -271,15 +272,14 @@ class Upload extends Component {
                 onChange={this.setDescription}
               />
 
-              <div className={classes.fileInput}></div>
               <Button
                 type="submit"
                 color="primary"
                 variant="contained"
                 size="large"
-                fullWidth
+                style = {{borderRadius:100}}
                 className={classes.buttonSubmit}
-                startIcon={<CloudUploadIcon />}
+                startIcon={<CloudUploadIcon/>}
               >
                 Upload
               </Button>
@@ -295,7 +295,6 @@ class Upload extends Component {
               </form>
               {console.log(this.state.items)}
             </div>
-            
           </Paper>
         )}
       </div>

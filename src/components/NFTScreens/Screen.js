@@ -48,7 +48,7 @@ const useStyles = (theme) => ({
   },
   fileInput: {
     width: "97%",
-    margin: "10px 0",
+    margin: "5px 0",
   },
   buttonSubmit: {
     marginBottom: 10,
@@ -120,6 +120,7 @@ class Screen extends Component {
       this.setState({ contractAddress: networkData.address });
       console.log(this.state.contractAddress);
       this.setState({ loading: false });
+      this.setState({tokenId: this.props.id});
     } else {
       window.alert("NFT contract not deployed to detected network.");
     }
@@ -136,7 +137,7 @@ class Screen extends Component {
     };
   };
 
-  uploadPost = (name, description) => {
+  uploadSpecialSwag = (name, description) => {
     this.setState({ loading: true });
 
     const data = this.state.buffer;
@@ -158,7 +159,7 @@ class Screen extends Component {
 
     metadata.then(async (value) => {
       this.state.carnival.methods
-        .uploadVideo(this.state.account, value)
+        .createSpecialSwag(this.state.tokenId, value)
         .send({ from: this.state.account })
         .on("transactionHash", (hash) => {
           this.setState({ loading: false });
@@ -170,12 +171,58 @@ class Screen extends Component {
     this.setState({ loading: false });
   };
 
-  setName = (event) => {
-    this.setState({ name: event.target.value });
+  uploadSwag = (quantity, cost) => {
+    this.setState({ loading: true });
+
+    const data = this.state.buffer;
+
+    async function getMetadata() {
+      console.log("metadata");
+      const metadata = await client.store({
+        name: quantity,
+        description: cost,
+        image: new File([data], 'trial.jpg', { type: 'image/jpg' }),
+      });
+      console.log("metadata", metadata);
+      return metadata.url;
+    }
+
+    const metadata = getMetadata();
+
+    console.log(metadata);
+
+    metadata.then(async (value) => {
+      this.state.carnival.methods
+        .createSwagNFT(this.state.tokenId, quantity, cost, value)
+        .send({ from: this.state.account })
+        .on("transactionHash", (hash) => {
+          this.setState({ loading: false });
+        });
+
+      console.log(value);
+    });
+
+    this.setState({ loading: false });
   };
 
-  setDescription = (event) => {
-    this.setState({ description: event.target.value });
+  setQuantity = (event) => {
+    this.setState({ quantity: event.target.value });
+  };
+
+  setCost = (event) => {
+    this.setState({ cost: event.target.value });
+  };
+
+  watchVideo = (id, hash, title, owner) => {
+    this.setState({ loading: true });
+    //make payment
+    this.state.carnival.methods.watchVideo(id).send({ from: this.state.account}).on('transactionHash', (hash) => {
+      this.setState({ loading: false })
+    })
+
+    this.setState({ currentHash: hash });
+    this.setState({ currentTitle: title });
+    this.setState({ currentOwner: owner });
   };
 
 constructor(props) {
@@ -185,10 +232,15 @@ constructor(props) {
       carnival: null,
       contractAddress: null,
       loading: true,
-      name: "",
-      description: "",
+      quantity: "",
+      cost: "",
+      tokenId: 0,
+      currentHash: null,
+      currentTitle: null,
+      currentOwner: null,
     };
-    this.uploadPost = this.uploadPost.bind(this);
+    this.uploadSwag = this.uploadSwag.bind(this);
+    this.uploadSpecialSwag = this.uploadSpecialSwag.bind(this);
     this.captureFile = this.captureFile.bind(this);
   }
   
@@ -199,16 +251,25 @@ constructor(props) {
         <div style={{marginLeft: "2%"}}></div>
         <div className="card mb-4">
           <div>
+            
             <video
-              src="https://youtu.be/Il0S8BoucSA"
+              src={`https://ipfs.infura.io/ipfs/${video.hash}`}
               controls
               style={{ width: "800px" }}
+              onClick={() => {
+                this.changeVideo(
+                  video.id,
+                  video.hash,
+                  video.title,
+                  video.author,                                  
+                )
+              }}
             ></video>
           </div>
           <h3>
             <b>
               <i style={{ color: "black", marginLeft: "2%" }}>
-                Token Id: {this.props.id}
+                Token Id: {this.state.tokenId}
               </i>
             </b>
           </h3>
@@ -229,15 +290,16 @@ constructor(props) {
           </div>
         ) : (
         <Paper className={classes.paper}>
+          <h5>POSTER NFT</h5>
           <form
               autoComplete="off"
               noValidate
               className={`${classes.root} ${classes.form}`}
               onSubmit={(event) => {
                 event.preventDefault();
-                const name = this.state.name;
-                const description = this.state.description;
-                this.uploadPost(name, description);
+                const name = "";
+                const description = "";
+                this.uploadSpecialSwag(name, description);
               }}
             >
               <input
@@ -269,15 +331,17 @@ constructor(props) {
                 Upload
               </Button>
             </form>
+
+            <h5>---------------------------------------------</h5>
             <form
               autoComplete="off"
               noValidate
               className={`${classes.root} ${classes.form}`}
               onSubmit={(event) => {
                 event.preventDefault();
-                const name = this.state.name;
-                const description = this.state.description;
-                this.uploadPost(name, description);
+                const quantity = this.state.quantity;
+                const cost = this.state.cost;
+                this.uploadSwag(quantity, cost);
               }}
             >
               <input
@@ -303,7 +367,7 @@ constructor(props) {
                 label="Quantity"
                 fullWidth
                 value={this.state.value}
-                onChange={this.setName}
+                onChange={this.setQuantity}
               />
               <TextField
                 name="description"
@@ -311,7 +375,7 @@ constructor(props) {
                 label="Cost"
                 fullWidth
                 value={this.state.value}
-                onChange={this.setDescription}
+                onChange={this.setCost}
               />
               <div className={classes.fileInput}></div>
               <Button

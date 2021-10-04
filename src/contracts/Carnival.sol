@@ -17,7 +17,8 @@ contract Carnival is ERC1155Token{
     mapping(uint256 => mapping(address => uint256)) public shares;
     mapping(uint256 => uint256[]) public relatedNFTs; //tokenNo to array of tokenNos
     mapping(uint256 => uint256) public specialSwag;
-    
+    mapping(uint256 => uint256) public swagPrice;
+
     function setStreamingRate(uint256 rate) public onlyOwner {
         streamingRate = rate;
     }
@@ -49,12 +50,14 @@ contract Carnival is ERC1155Token{
     
     function createSwagNFT(
         uint256 _tokenId, 
-        uint256 _quantity, 
+        uint256 _quantity,
+        uint256 _price, 
         string calldata _uri)
         public returns (uint256){
             require(creators[_tokenId] == msg.sender, "Carnival#createSwagNFT: ONLY_CREATOR_ALLOWED");
             uint256 _id = _createNFT(msg.sender, _quantity, _uri, "");
             relatedNFTs[_tokenId].push(_id);
+            swagPrice[_id] = _price;
             return _id;
     }
     
@@ -67,4 +70,8 @@ contract Carnival is ERC1155Token{
             specialSwag[_tokenId] = _id;
             return _id;
         }
+
+    //watch video
+
+    //buy swag nft
 }

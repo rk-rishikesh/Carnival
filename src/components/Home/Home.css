@@ -13,7 +13,6 @@
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background-color: #f8f5fa;
     display: flex;
     /* justify-content: center; */
     align-items: center;
@@ -28,10 +27,16 @@
     width: 120vh;
     align-items: right;
     margin-left: 80px;
-    background-color: #f8f5fa;
 }
 
 .hbutton {
     margin-top: 16%;
     margin-left: 25%;
+}
+
+body {
+    background: #654ea3;
+    background: linear-gradient(to right, #e96443, #904e95);
+    min-height: 100vh;
+    overflow-x: hidden
 }
