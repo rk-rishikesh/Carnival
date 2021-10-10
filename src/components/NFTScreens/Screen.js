@@ -290,6 +290,11 @@ class Screen extends Component {
     e.preventDefault();
   }
 
+
+  winner() {
+    alert("Winner would be declared after 24 hrs !!");
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -320,6 +325,7 @@ class Screen extends Component {
     this.addItem = this.addItem.bind(this);
     this.x = this.x.bind(this);
     this.watchVideo = this.watchVideo.bind(this);
+    this.winner = this.winner.bind(this);
   }
 
   render() {
@@ -361,7 +367,13 @@ class Screen extends Component {
               {this.state.account == this.state.owner ? (
                 <Paper className={classes.paper}>
                 <div>
-                  <img style={{width:"100%", height:"100px"}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA_Z5Ernr5oHs2tB1OzYqtBA0iOpzjVWznzA&usqp=CAU"/>
+                  <Button 
+                  style = {{marginLeft: "36%"}}
+                  variant="contained"
+                  onClick={() => {
+                      this.winner();
+                    }}>Get Winner</Button>
+                  <img style={{width:"100%", height:"80px"}} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA_Z5Ernr5oHs2tB1OzYqtBA0iOpzjVWznzA&usqp=CAU"/>
                   <form
                     autoComplete="off"
                     noValidate
@@ -534,8 +546,8 @@ class Screen extends Component {
                         <Button><img src={d} style={{width:"180px", height: "180px",marginLeft: "3%"}}>
                         </img></Button>
                         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.05 ETH
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.07ETH
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.01 ETH
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.07ETH
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.01 ETH
                         </p>
 
                       </CardContent>

@@ -2,20 +2,18 @@ import React, { Component } from "react";
 import Web3 from "web3";
 import Carnival from "../../abis/Carnival.json";
 import Button from "@material-ui/core/Button";
-import { Link, withRouter } from "react-router-dom";
-import IconButton from '@material-ui/core/IconButton';
-import BeachAccessIcon from '@material-ui/icons/BeachAccess';
-import BeenhereIcon from '@material-ui/icons/Beenhere';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import styles from './Feed.module.css';
+import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Row, Col, Container} from 'react-bootstrap';
+import { Biconomy } from "@biconomy/mexa";
 
 import Favorite from "@material-ui/icons/Favorite";
 import s from "./spidy.png";
 import h from "./hal.png";
 import j from "./halloween.png";
 import k from "./halll.png";
+
+let biconomy;
+
 
 class Feed extends Component {
     async componentWillMount() {
@@ -24,42 +22,57 @@ class Feed extends Component {
     }
 
     async loadWeb3() {
-        if (window.ethereum) {
-            window.web3 = new Web3(window.ethereum);
-            await window.ethereum.enable();
-        } else if (window.web3) {
-            window.web3 = new Web3(window.web3.currentProvider);
-        } else {
-            window.alert(
-                "Non-Ethereum browser detected. You should consider trying MetaMask!"
-            );
-        }
+      if (window.ethereum) {
+        biconomy = new Biconomy(window.ethereum, {
+          apiKey: "84NnNLT6K.99eb02de-3dff-41db-9cca-636881e73a11",
+        });
+        window.web3 = new Web3(biconomy);
+        await window.ethereum.enable();
+      } else if (window.web3) {
+        biconomy = new Biconomy(window.web3.currentProvider, {
+          apiKey: "84NnNLT6K.99eb02de-3dff-41db-9cca-636881e73a11",
+        });
+        window.web3 = new Web3(biconomy);
+      } else {
+        window.alert(
+          "Non-Ethereum browser detected. You should consider trying MetaMask!"
+        );
+      }
     }
 
-
     async loadBlockchainData() {
-
-        const web3 = window.web3;
-        // Initialize your dapp here like getting user accounts etc
-        // Load account
-        const accounts = await web3.eth.getAccounts();
-        this.setState({ account: accounts[0] });
-        // Network ID
-        const networkId = await web3.eth.net.getId();
-        const networkData = Carnival.networks[networkId];
-
-        if (networkData) {
+      biconomy
+        .onEvent(biconomy.READY, async () => {
+          const web3 = window.web3;
+          console.log("Hello");
+          // Load account
+          const accounts = await web3.eth.getAccounts();
+          this.setState({ account: accounts[0] });
+          // Network ID
+          const networkId = await web3.eth.net.getId();
+          const networkData = Carnival.networks[networkId];
+          if (networkData) {
+            console.log("Hello bbb");
             const carnival = new web3.eth.Contract(Carnival.abi, networkData.address);
             this.setState({ carnival });
+            console.log(this.state.carnival)
             this.setState({ loading: false });
-        } else {
-            window.alert("NFT contract not deployed to detected network.");
-        }
+            this.setState({ tokenId: 3});
+          } else {
+            window.alert("TroveIt contract not deployed to detected network.");
+          }
+        })
+        .onEvent(biconomy.ERROR, (error, message) => {
+          // Handle error while initializing mexa
+          console.log(error);
+        });
+      this.setState({ loading: false });
     }
 
 
     addViewer(feedId) {
         this.setState({ loading: true });
+        console.log(this.state.carnival)
         this.state.carnival.methods
           .addViewer(feedId)
           .send({ from: this.state.account })
@@ -73,7 +86,9 @@ class Feed extends Component {
         this.state = {
             account: "",
             carnival: null,
-            loading: true
+            contractAddress: null,
+            loading: true,
+            tokenId: 0
         };
         this.addViewer = this.addViewer.bind(this);
     }
@@ -88,6 +103,10 @@ class Feed extends Component {
                     <Button
                     color="white"
                     size="small"
+                    onClick={() => {
+                      console.log(this.state.tokenId)
+                      this.addViewer(this.state.tokenId);
+                    }}
                     >
                     
                     <Link class="nav-link" to="/screen/1" style={{ color: "#fd535b" }} >
@@ -137,6 +156,7 @@ class Feed extends Component {
                       </div>
                     </Link>
                     </Button>
+
                     <Button
                     color="white"
                     size="small"
@@ -193,6 +213,9 @@ class Feed extends Component {
                     <Button
                     color="white"
                     size="small"
+                    onClick={() => {
+                      this.addViewer(this.state.tokenId);
+                    }}
                     >
                     
                     <Link class="nav-link" to="/screen/2" style={{ color: "#fd535b" }} >

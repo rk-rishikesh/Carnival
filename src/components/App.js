@@ -12,13 +12,13 @@ import Card from 'react-bootstrap/Card'
 import Button from "@material-ui/core/Button";
 function App() {
     
-      const { authenticate, isAuthenticated, user } = useMoralis();
+      // const { authenticate, isAuthenticated, user } = useMoralis();
 
       // if (!isAuthenticated) {
       //   return (
       //     <div className="not-found">
 
-      //       <img className = "forgif" src="https://image.freepik.com/free-vector/carnival-design-with-colorful-balloons-canon-icon_24911-19736.jpg"/>
+      //       <div style={{marginLeft: "50%"}}></div>
   
       
       //       <div
@@ -29,13 +29,12 @@ function App() {
       //       >
       //         <div className = "button">
     
-      //         <Card style={{ width: '28rem' }}>
-      //           <Card.Img variant="top" src="https://freepngimg.com/download/carnival/26215-4-carnival-photo.png" />
+      //         <Card style={{ width: '25rem' }}>
+      //           <Card.Img variant="top" style = {{width:"100%", height: "10%"}} src="https://i.pinimg.com/originals/7d/52/da/7d52da681113c77e9b81a879130f2f21.gif" />
       //           <Card.Body>
-      //             <Card.Title>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WELCOME TO THE CARNIVAL</Card.Title>
+      //             <Card.Title>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WELCOME TO THE CARNIVAL</Card.Title>
       //             <Card.Text>
-      //               Some quick example text to build on the card title and make up the bulk of
-      //               the card's content.
+                    
       //             </Card.Text>
       //             <div className = "innerButton">
       //             <Button
