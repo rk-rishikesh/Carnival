@@ -9,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { NFTStorage, File } from "nft.storage";
 import { TextField, Paper } from "@material-ui/core";
+import pic from "./Img.png";
 
 //import { TextField, Paper, Typography } from "@material-ui/core";
 //import bg from './trial.jpg';
@@ -217,7 +218,7 @@ class Upload extends Component {
             {/* loader */}
             <br></br>
             <img
-              src="https://media.giphy.com/media/Daw1ObwDEeHja/giphy.gif"
+              src="https://akalsaad.files.wordpress.com/2014/11/ferris_wheel.gif"
               style={{
                 marginLeft: "25%",
                 width: "50%",
@@ -227,6 +228,7 @@ class Upload extends Component {
           </div>
         ) : (
           <Paper className={classes.paper}>
+            <img style ={{width: "100%"}} src={pic}/>
             <form
               autoComplete="off"
               noValidate
@@ -284,17 +286,6 @@ class Upload extends Component {
                 Upload
               </Button>
             </form>
-
-            <div>
-              <form onSubmit={this.addItem}>
-                <input
-                  ref={(a) => (this._inputElement = a)}
-                  placeholder="Add Sub Owner"
-                ></input>
-                <button type="submit">add</button>
-              </form>
-              {console.log(this.state.items)}
-            </div>
           </Paper>
         )}
       </div>

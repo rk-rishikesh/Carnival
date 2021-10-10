@@ -9,8 +9,7 @@
 }
 
 body {
-    background: #654ea3;
-    background: linear-gradient(to right, #e96443, #904e95);
+    background-image: 'https://wallpaperaccess.com/full/1546081.jpg';
     min-height: 100vh;
     overflow-x: hidden
 }

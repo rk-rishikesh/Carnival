@@ -28,6 +28,16 @@ module.exports = {
       networkCheckTimeout: 10000000,
       skipDryRun: true
     },
+    kovan: {
+      networkCheckTimeout: 10000,
+      provider: () => {
+         return new HDWalletProvider(
+          mnemonic,
+           `wss://kovan.infura.io/ws/v3/84516a8d18fe4958bd33f09a8b2daad9`
+         );
+      },
+      network_id: "42",
+   },
   },
   
   contracts_directory: './src/contracts/',
